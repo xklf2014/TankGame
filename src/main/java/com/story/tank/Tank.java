@@ -12,8 +12,11 @@ public class Tank {
     private static final int SPEED = 5;
     private boolean moving = false;
     private TankFrame tf;
+    public static final int WIDTH = ResourceMgr.tankD.getWidth(), HEIGHT = ResourceMgr.tankD.getHeight();
 
-    public Tank(int x, int y, Dir dir,TankFrame tf) {
+    private boolean living = true;
+
+    public Tank(int x, int y, Dir dir, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
@@ -21,16 +24,29 @@ public class Tank {
     }
 
     public void paint(Graphics g) {
-        Color color = g.getColor();
-        g.setColor(Color.YELLOW);
-        g.fillRect(x, y, 50, 50);
-        g.setColor(color);
+        if (!living) tf.enemies.remove(this);
+
+        switch (dir) {
+            case LEFT:
+                g.drawImage(ResourceMgr.tankL, x, y, null);
+                break;
+            case UP:
+                g.drawImage(ResourceMgr.tankU, x, y, null);
+                break;
+            case RIGHT:
+                g.drawImage(ResourceMgr.tankR, x, y, null);
+                break;
+            case DOWN:
+                g.drawImage(ResourceMgr.tankD, x, y, null);
+                break;
+        }
+
         move();
 
     }
 
     private void move() {
-        if (!moving)return;
+        if (!moving) return;
 
         switch (dir) {
             case LEFT:
@@ -64,7 +80,29 @@ public class Tank {
         this.moving = moving;
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
     public void fire() {
-        tf.bullets.add(new Bullet(this.x,this.y,this.dir,this.tf));
+        int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2 - 1;
+        int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2 + 4;
+        tf.bullets.add(new Bullet(bX, bY, this.dir, this.tf));
+    }
+
+    public void die() {
+        this.living = false;
     }
 }
