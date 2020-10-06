@@ -29,6 +29,8 @@ public class Bullet {
         rect.y = this.y;
         rect.width = Bullet.WIDTH;
         rect.height = Bullet.HEIGHT;
+
+        this.tf.bullets.add(this);
     }
 
     public void paint(Graphics g) {

@@ -20,6 +20,7 @@ public class Tank {
     private Random random = new Random();
     private Group group = Group.BAD;
     Rectangle rect = new Rectangle();
+    FireStrategy fs;
 
     public Tank(int x, int y, Dir dir, Group group, TankFrame tf) {
         this.x = x;
@@ -29,6 +30,9 @@ public class Tank {
         this.group = group;
         if (this.group == Group.BAD) {
             this.moving = true;
+            fs = getFireStrategy("badfireStategy");
+        }else{
+            fs = getFireStrategy("goodfireStategy");
         }
 
         this.SPEED = PropertyMgr.getInt("tankSpeed");
@@ -149,13 +153,28 @@ public class Tank {
         this.group = group;
     }
 
+    public TankFrame getTf() {
+        return tf;
+    }
 
+    public FireStrategy getFireStrategy(String key) {
+        String fireStategy = PropertyMgr.getString(key);
+        try {
+            fs = (FireStrategy) Class.forName(fireStategy).newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return fs;
+    }
 
     public void fire() {
-        int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2 - 1;
-        int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2 + 4;
 
-        tf.bullets.add(new Bullet(bX, bY, this.dir, this.group, this.tf));
+        this.fs.fire(this);
     }
 
     public void die() {

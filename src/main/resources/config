@@ -6,3 +6,5 @@ gameHeight=720
 myTankLocX=200
 myTankLocY=400
 myTankDir=Down
+goodfireStategy=com.story.tank.FourDirFireStategy
+badfireStategy=com.story.tank.DefaultFireStrategy
