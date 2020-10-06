@@ -14,12 +14,14 @@ public class Bullet {
     private Dir dir;
     private boolean living = true;
     TankFrame tf = null;
+    private Group group = Group.BAD;
 
-    public Bullet(int x, int y, Dir dir, TankFrame tf) {
+    public Bullet(int x, int y, Dir dir, Group group, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.tf = tf;
+        this.group = group;
     }
 
     public void paint(Graphics g) {
@@ -43,10 +45,6 @@ public class Bullet {
                 break;
         }
 
-        /*Color color = g.getColor();
-        g.setColor(Color.RED);
-        g.fillOval(x, y, WIDTH, HEIGHT);
-        g.setColor(color);*/
         move();
     }
 
@@ -72,16 +70,29 @@ public class Bullet {
     }
 
     public void collideWith(Tank tank) {
-        Rectangle bulletRect = new Rectangle(this.x,this.y,WIDTH,HEIGHT);
-        Rectangle tankRect = new Rectangle(tank.getX(),tank.getY(),Tank.WIDTH,Tank.HEIGHT);
 
-        if (bulletRect.intersects(tankRect)){
+        if (this.group == tank.getGroup()) return;
+        Rectangle bulletRect = new Rectangle(this.x, this.y, WIDTH, HEIGHT);
+        Rectangle tankRect = new Rectangle(tank.getX(), tank.getY(), Tank.WIDTH, Tank.HEIGHT);
+
+        if (bulletRect.intersects(tankRect)) {
             tank.die();
             this.die();
+            int eX = tank.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
+            int eY = tank.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
+            tf.explodes.add(new Explode(eX, eY, this.tf));
         }
     }
 
     private void die() {
         this.living = false;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
     }
 }

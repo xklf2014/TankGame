@@ -20,13 +20,13 @@ public class Tank {
     private Random random = new Random();
     private Group group = Group.BAD;
 
-    public Tank(int x, int y, Dir dir,Group group, TankFrame tf) {
+    public Tank(int x, int y, Dir dir, Group group, TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
         this.tf = tf;
         this.group = group;
-        if (this.group == Group.BAD){
+        if (this.group == Group.BAD) {
             this.moving = true;
         }
     }
@@ -38,7 +38,7 @@ public class Tank {
         BufferedImage tankR = ResourceMgr.badTankR;
         BufferedImage tankD = ResourceMgr.badTankD;
 
-        if (this.group == Group.GOOD){
+        if (this.group == Group.GOOD) {
             tankL = ResourceMgr.goodTankL;
             tankU = ResourceMgr.goodTankU;
             tankR = ResourceMgr.goodTankR;
@@ -81,9 +81,21 @@ public class Tank {
                 y += SPEED;
                 break;
         }
-        if (this.group == Group.BAD) {
-            if (random.nextInt(10) > 8) this.fire();
-        }
+        if (this.group == Group.BAD && random.nextInt(100) > 95) this.fire();
+        if (this.group == Group.BAD && random.nextInt(100) > 95) randomDir();
+
+        boundsCheck();
+    }
+
+    private void boundsCheck() {
+        if (this.x < 2) x = 2;
+        if (this.y < 30) y = 30;
+        if (this.x > TankFrame.GAME_WIDTH - Tank.WIDTH - 2) x = TankFrame.GAME_WIDTH - Tank.WIDTH - 2;
+        if (this.y > TankFrame.GAME_HEIGHT - Tank.HEIGHT - 2) y = TankFrame.GAME_HEIGHT - Tank.HEIGHT - 2;
+    }
+
+    private void randomDir() {
+        this.dir = Dir.values()[random.nextInt(4)];
     }
 
     public Dir getDir() {
@@ -130,7 +142,7 @@ public class Tank {
         int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2 - 1;
         int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2 + 4;
 
-        tf.bullets.add(new Bullet(bX, bY, this.dir, this.group,this.tf));
+        tf.bullets.add(new Bullet(bX, bY, this.dir, this.group, this.tf));
     }
 
     public void die() {
