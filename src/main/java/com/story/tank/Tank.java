@@ -11,7 +11,7 @@ import java.util.Random;
 public class Tank {
     private int x, y;
     private Dir dir = Dir.DOWN;
-    private static final int SPEED = 5;
+    private final int SPEED;
     private boolean moving = false;
     private TankFrame tf;
     public static final int WIDTH = ResourceMgr.goodTankU.getWidth(), HEIGHT = ResourceMgr.goodTankU.getHeight();
@@ -19,6 +19,7 @@ public class Tank {
     private boolean living = true;
     private Random random = new Random();
     private Group group = Group.BAD;
+    Rectangle rect = new Rectangle();
 
     public Tank(int x, int y, Dir dir, Group group, TankFrame tf) {
         this.x = x;
@@ -29,6 +30,13 @@ public class Tank {
         if (this.group == Group.BAD) {
             this.moving = true;
         }
+
+        this.SPEED = PropertyMgr.getInt("tankSpeed");
+
+        rect.x = this.x;
+        rect.y = this.y;
+        rect.width = Tank.WIDTH;
+        rect.height = Tank.HEIGHT;
     }
 
     public void paint(Graphics g) {
@@ -85,6 +93,9 @@ public class Tank {
         if (this.group == Group.BAD && random.nextInt(100) > 95) randomDir();
 
         boundsCheck();
+
+        rect.x = this.x;
+        rect.y = this.y;
     }
 
     private void boundsCheck() {
@@ -137,6 +148,8 @@ public class Tank {
     public void setGroup(Group group) {
         this.group = group;
     }
+
+
 
     public void fire() {
         int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2 - 1;

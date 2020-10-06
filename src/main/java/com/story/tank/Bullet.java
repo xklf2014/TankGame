@@ -7,7 +7,7 @@ import java.awt.*;
  * @CreateTIme 2020/10/3
  **/
 public class Bullet {
-    private static final int SPEED = 10;
+    private final int SPEED;
     public static final int WIDTH = ResourceMgr.bulletD.getWidth(), HEIGHT = ResourceMgr.bulletD.getHeight();
 
     private int x, y;
@@ -15,6 +15,7 @@ public class Bullet {
     private boolean living = true;
     TankFrame tf = null;
     private Group group = Group.BAD;
+    Rectangle rect = new Rectangle();
 
     public Bullet(int x, int y, Dir dir, Group group, TankFrame tf) {
         this.x = x;
@@ -22,6 +23,12 @@ public class Bullet {
         this.dir = dir;
         this.tf = tf;
         this.group = group;
+        this.SPEED = PropertyMgr.getInt("bulletSpeed");
+
+        rect.x = this.x;
+        rect.y = this.y;
+        rect.width = Bullet.WIDTH;
+        rect.height = Bullet.HEIGHT;
     }
 
     public void paint(Graphics g) {
@@ -67,15 +74,18 @@ public class Bullet {
 
         if (x < 0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT) living = false;
 
+        rect.x = this.x;
+        rect.y = this.y;
     }
+
 
     public void collideWith(Tank tank) {
 
         if (this.group == tank.getGroup()) return;
-        Rectangle bulletRect = new Rectangle(this.x, this.y, WIDTH, HEIGHT);
-        Rectangle tankRect = new Rectangle(tank.getX(), tank.getY(), Tank.WIDTH, Tank.HEIGHT);
+        //rectangle bulletRect = new Rectangle(this.x, this.y, WIDTH, HEIGHT);
+        //Rectangle tankRect = new Rectangle(tank.getX(), tank.getY(), Tank.WIDTH, Tank.HEIGHT);
 
-        if (bulletRect.intersects(tankRect)) {
+        if (this.rect.intersects(tank.rect)) {
             tank.die();
             this.die();
             int eX = tank.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;

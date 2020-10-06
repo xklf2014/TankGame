@@ -15,13 +15,11 @@ import java.util.List;
  **/
 public class TankFrame extends Frame {
 
-    Tank myTank = new Tank(200, 400, Dir.DOWN,Group.GOOD,this);
+    Tank myTank = new Tank(PropertyMgr.getInt("myTankLocX"), PropertyMgr.getInt("myTankLocY"), getDir(), Group.GOOD, this);
     List<Bullet> bullets = new ArrayList<>();
     List<Tank> enemies = new ArrayList<>();
-    static final int GAME_WIDTH = 800, GAME_HEIGHT = 600;
+    static final int GAME_WIDTH = PropertyMgr.getInt("gameWidth"), GAME_HEIGHT = PropertyMgr.getInt("gameHeight");
     List<Explode> explodes = new ArrayList<>();
-    //Explode explode = new Explode(100,100,this);
-
 
     public TankFrame() {
         setVisible(true);
@@ -57,8 +55,8 @@ public class TankFrame extends Frame {
     public void paint(Graphics g) {
         Color color = g.getColor();
         g.setColor(Color.WHITE);
-        g.drawString("子弹的数量:" + bullets.size(),10,60);
-        g.drawString("敌军的数量:" + enemies.size(),10,80);
+        g.drawString("子弹的数量:" + bullets.size(), 10, 60);
+        g.drawString("敌军的数量:" + enemies.size(), 10, 80);
         g.setColor(color);
 
         myTank.paint(g);
@@ -153,6 +151,21 @@ public class TankFrame extends Frame {
 
         }
 
+    }
+
+    public Dir getDir(){
+        switch (PropertyMgr.getString("myTankDir").toUpperCase()){
+            case "UP":
+                return Dir.UP;
+            case "LEFT":
+                return Dir.LEFT;
+            case "RIGHT":
+                return Dir.RIGHT;
+            case "DOWN":
+                return Dir.DOWN;
+            default:
+                return Dir.DOWN;
+        }
     }
 
 }
