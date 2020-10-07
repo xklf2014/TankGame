@@ -12,6 +12,9 @@ public class ResourceMgr {
     public static BufferedImage goodTankL, goodTankU, goodTankR, goodTankD,badTankU,badTankL,badTankR,badTankD;
     public static BufferedImage bulletL, bulletU, bulletR, bulletD;
     public static BufferedImage[] explodes = new BufferedImage[16];
+    public static BufferedImage[] explodes_new = new BufferedImage[11];
+    public static BufferedImage bulletL_new, bulletU_new, bulletR_new, bulletD_new;
+    public static BufferedImage goodTankU_new, goodTankD_new, goodTankL_new, goodTankR_new;
 
     static {
         try {
@@ -30,8 +33,22 @@ public class ResourceMgr {
             bulletR = ImageUtil.rotateImage(bulletU, 90);
             bulletD = ImageUtil.rotateImage(bulletU, 180);
 
+            bulletU_new = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/bulletU.gif"));
+            bulletL_new = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/bulletL.gif"));
+            bulletR_new = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/bulletR.gif"));
+            bulletD_new = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/bulletD.gif"));
+
+            goodTankU_new = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/tankU.gif"));
+            goodTankL_new = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/tankL.gif"));
+            goodTankR_new = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/tankR.gif"));
+            goodTankD_new = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/tankD.gif"));
+
             for (int i = 0; i < 16; i++) {
                 explodes[i] = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/e" + (i + 1) + ".gif"));
+            }
+
+            for (int i = 0; i < 11; i++) {
+                explodes_new[i] = ImageIO.read(ResourceMgr.class.getClassLoader().getResourceAsStream("images/" + i + ".gif"));
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,5 +1,8 @@
 package com.story.tank;
 
+import com.story.abstractfactory.BaseTank;
+
+
 /**
  * @Author story
  * @CreateTIme 2020/10/6
@@ -11,7 +14,8 @@ public class FourDirFireStategy implements FireStrategy {
         int bY = tank.getY() + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2 + 4;
         Dir[] dirs = Dir.values();
         for (Dir dir : dirs){
-            new Bullet(bX, bY, dir, tank.getGroup(), tank.getTf());
+            tank.getTf().gf.createBullet(bX, bY, dir, tank.getGroup(), tank.getTf());
+            //new Bullet(bX, bY, dir, tank.getGroup(), tank.getTf());
         }
 
 

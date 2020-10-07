@@ -1,6 +1,8 @@
 package com.story.tank;
 
 
+import com.story.abstractfactory.*;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -16,10 +18,12 @@ import java.util.List;
 public class TankFrame extends Frame {
 
     Tank myTank = new Tank(PropertyMgr.getInt("myTankLocX"), PropertyMgr.getInt("myTankLocY"), getDir(), Group.GOOD, this);
-    List<Bullet> bullets = new ArrayList<>();
+    List<BaseBullet> bullets = new ArrayList<>();
     List<Tank> enemies = new ArrayList<>();
     static final int GAME_WIDTH = PropertyMgr.getInt("gameWidth"), GAME_HEIGHT = PropertyMgr.getInt("gameHeight");
-    List<Explode> explodes = new ArrayList<>();
+    List<BaseExplode> explodes = new ArrayList<>();
+
+    GameFactory gf = new DefaultFactory();
 
     public TankFrame() {
         setVisible(true);

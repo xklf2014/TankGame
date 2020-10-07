@@ -1,5 +1,7 @@
 package com.story.tank;
 
+import com.story.abstractfactory.BaseTank;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
@@ -8,7 +10,7 @@ import java.util.Random;
  * @Author story
  * @CreateTIme 2020/10/3
  **/
-public class Tank {
+public class Tank extends BaseTank {
     private int x, y;
     private Dir dir = Dir.DOWN;
     private final int SPEED;
