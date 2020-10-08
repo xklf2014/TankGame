@@ -1,9 +1,6 @@
 package com.story.tank;
 
-import com.story.tank.cor.BulletTankCollider;
-import com.story.tank.cor.Collider;
 import com.story.tank.cor.ColliderChain;
-import com.story.tank.cor.TankTankCollider;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -14,20 +11,34 @@ import java.util.List;
  * @CreateTIme 2020/10/8
  **/
 public class GameModel {
-    Tank myTank = new Tank(PropertyMgr.getInt("myTankLocX"), PropertyMgr.getInt("myTankLocY"), getDir(), Group.GOOD, this);
+    Tank myTank;
     static final int GAME_WIDTH = PropertyMgr.getInt("gameWidth"), GAME_HEIGHT = PropertyMgr.getInt("gameHeight");
     private List<GameObject> gameObjects = new ArrayList<>();
     ColliderChain colliderChain = new ColliderChain();
+    private static final GameModel INSTANCE = new GameModel();
 
+    public static GameModel getInstance() {
+        return INSTANCE;
+    }
 
-    public GameModel() {
+    static {
+        INSTANCE.init();
+    }
+
+    private GameModel() {
+
+    }
+
+    public void init(){
+        myTank = new Tank(PropertyMgr.getInt("myTankLocX"), PropertyMgr.getInt("myTankLocY"), getDir(), Group.GOOD);
+
         int initTankCount = PropertyMgr.getInt("initTankCount");
         for (int i = 0; i < initTankCount; i++) {
-            add(new Tank(50 + i * 80, 200, Dir.DOWN, Group.BAD, this));
+            new Tank(50 + i * 80, 200, Dir.DOWN, Group.BAD);
         }
 
         for (int i = 0; i < 20; i++) {
-            add(new Wall(100+ i * Wall.WIDTH,300,this));
+            new Wall(100 + i * Wall.WIDTH, 300);
         }
     }
 
@@ -57,7 +68,7 @@ public class GameModel {
             for (int j = i + 1; j < gameObjects.size(); j++) {
                 GameObject o1 = gameObjects.get(i);
                 GameObject o2 = gameObjects.get(j);
-                colliderChain.collide(o1,o2);
+                colliderChain.collide(o1, o2);
 
             }
         }

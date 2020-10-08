@@ -6,3 +6,5 @@ gameHeight=720
 myTankLocX=200
 myTankLocY=400
 myTankDir=Down
+#colliders
+colliders=com.story.tank.cor.BulletTankCollider,com.story.tank.cor.TankTankCollider,com.story.tank.cor.TankWallCollider,com.story.tank.cor.BulletWallCollider

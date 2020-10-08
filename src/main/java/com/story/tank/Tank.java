@@ -20,13 +20,12 @@ public class Tank extends GameObject {
     private Random random = new Random();
     private Group group = Group.BAD;
     Rectangle rect = new Rectangle();
-    GameModel gm;
+    private int oldX,oldY;
 
-    public Tank(int x, int y, Dir dir, Group group, GameModel gm) {
+    public Tank(int x, int y, Dir dir, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
-        this.gm = gm;
         this.group = group;
         if (this.group == Group.BAD) {
             this.moving = true;
@@ -38,10 +37,12 @@ public class Tank extends GameObject {
         rect.y = this.y;
         rect.width = Tank.WIDTH;
         rect.height = Tank.HEIGHT;
+
+        GameModel.getInstance().add(this);
     }
 
     public void paint(Graphics g) {
-        if (!living) gm.remove(this);
+        if (!living) GameModel.getInstance().remove(this);
         BufferedImage tankL = ResourceMgr.badTankL;
         BufferedImage tankU = ResourceMgr.badTankU;
         BufferedImage tankR = ResourceMgr.badTankR;
@@ -73,7 +74,15 @@ public class Tank extends GameObject {
 
     }
 
+    public void back(){
+        this.x = oldX;
+        this.y = oldY;
+    }
+
     private void move() {
+        oldX = this.x;
+        oldY = this.y;
+
         if (!moving) return;
 
         switch (dir) {
@@ -156,7 +165,7 @@ public class Tank extends GameObject {
         int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2 - 1;
         int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2 + 4;
 
-        gm.add(new Bullet(bX, bY, this.dir, this.group, this.gm));
+        GameModel.getInstance().add(new Bullet(bX, bY, this.dir, this.group));
     }
 
     public void die() {
@@ -168,7 +177,4 @@ public class Tank extends GameObject {
     }
 
 
-    public GameModel getGm() {
-        return gm;
-    }
 }

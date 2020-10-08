@@ -10,17 +10,16 @@ public class Wall extends GameObject{
     public static final int WIDTH = ResourceMgr.wall.getWidth(), HEIGHT = ResourceMgr.wall.getHeight();
 
     private int x, y;
-    GameModel gm;
     private Rectangle rect = new Rectangle();
 
-    public Wall(int x, int y, GameModel gm) {
+    public Wall(int x, int y) {
         this.x = x;
         this.y = y;
-        this.gm = gm;
         rect.x = x;
         rect.y = y;
         rect.width = WIDTH;
         rect.height = HEIGHT;
+        GameModel.getInstance().add(this);
     }
 
     public void paint(Graphics g) {

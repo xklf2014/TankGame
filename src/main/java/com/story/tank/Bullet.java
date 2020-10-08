@@ -13,15 +13,13 @@ public class Bullet extends GameObject{
     private int x, y;
     private Dir dir;
     private boolean living = true;
-    GameModel gm = null;
     private Group group = Group.BAD;
     Rectangle rect = new Rectangle();
 
-    public Bullet(int x, int y, Dir dir, Group group, GameModel gm) {
+    public Bullet(int x, int y, Dir dir, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
-        this.gm = gm;
         this.group = group;
         this.SPEED = PropertyMgr.getInt("bulletSpeed");
 
@@ -29,12 +27,13 @@ public class Bullet extends GameObject{
         rect.y = this.y;
         rect.width = Bullet.WIDTH;
         rect.height = Bullet.HEIGHT;
+        GameModel.getInstance().add(this);
     }
 
     public void paint(Graphics g) {
 
         if (!living) {
-            gm.remove(this);
+            GameModel.getInstance().remove(this);
         }
 
         switch (dir) {
@@ -76,22 +75,6 @@ public class Bullet extends GameObject{
 
         rect.x = this.x;
         rect.y = this.y;
-    }
-
-
-    public void collideWith(Tank tank) {
-
-        if (this.group == tank.getGroup()) return;
-        //rectangle bulletRect = new Rectangle(this.x, this.y, WIDTH, HEIGHT);
-        //Rectangle tankRect = new Rectangle(tank.getX(), tank.getY(), Tank.WIDTH, Tank.HEIGHT);
-
-        if (this.rect.intersects(tank.rect)) {
-            tank.die();
-            this.die();
-            int eX = tank.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
-            int eY = tank.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
-            gm.add(new Explode(eX, eY, this.gm));
-        }
     }
 
     public void die() {
