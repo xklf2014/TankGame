@@ -20,12 +20,13 @@ public class Tank {
     private Random random = new Random();
     private Group group = Group.BAD;
     Rectangle rect = new Rectangle();
+    GameModel gm;
 
-    public Tank(int x, int y, Dir dir, Group group, TankFrame tf) {
+    public Tank(int x, int y, Dir dir, Group group, GameModel gm) {
         this.x = x;
         this.y = y;
         this.dir = dir;
-        this.tf = tf;
+        this.gm = gm;
         this.group = group;
         if (this.group == Group.BAD) {
             this.moving = true;
@@ -40,7 +41,7 @@ public class Tank {
     }
 
     public void paint(Graphics g) {
-        if (!living) tf.enemies.remove(this);
+        if (!living) gm.enemies.remove(this);
         BufferedImage tankL = ResourceMgr.badTankL;
         BufferedImage tankU = ResourceMgr.badTankU;
         BufferedImage tankR = ResourceMgr.badTankR;
@@ -155,7 +156,7 @@ public class Tank {
         int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2 - 1;
         int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2 + 4;
 
-        tf.bullets.add(new Bullet(bX, bY, this.dir, this.group, this.tf));
+        gm.bullets.add(new Bullet(bX, bY, this.dir, this.group, this.gm));
     }
 
     public void die() {
