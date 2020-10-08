@@ -130,19 +130,6 @@ public class TankFrame extends Frame {
 
     }
 
-    public Dir getDir(){
-        switch (PropertyMgr.getString("myTankDir").toUpperCase()){
-            case "UP":
-                return Dir.UP;
-            case "LEFT":
-                return Dir.LEFT;
-            case "RIGHT":
-                return Dir.RIGHT;
-            case "DOWN":
-                return Dir.DOWN;
-            default:
-                return Dir.DOWN;
-        }
-    }
+
 
 }

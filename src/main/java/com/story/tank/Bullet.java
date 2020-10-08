@@ -6,7 +6,7 @@ import java.awt.*;
  * @Author story
  * @CreateTIme 2020/10/3
  **/
-public class Bullet {
+public class Bullet extends GameObject{
     private final int SPEED;
     public static final int WIDTH = ResourceMgr.bulletD.getWidth(), HEIGHT = ResourceMgr.bulletD.getHeight();
 
@@ -34,7 +34,7 @@ public class Bullet {
     public void paint(Graphics g) {
 
         if (!living) {
-            gm.bullets.remove(this);
+            gm.remove(this);
         }
 
         switch (dir) {
@@ -90,11 +90,11 @@ public class Bullet {
             this.die();
             int eX = tank.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
             int eY = tank.getY() + Tank.HEIGHT / 2 - Explode.HEIGHT / 2;
-            gm.explodes.add(new Explode(eX, eY, this.gm));
+            gm.add(new Explode(eX, eY, this.gm));
         }
     }
 
-    private void die() {
+    public void die() {
         this.living = false;
     }
 
@@ -104,5 +104,9 @@ public class Bullet {
 
     public void setGroup(Group group) {
         this.group = group;
+    }
+
+    public Rectangle getRect() {
+        return rect;
     }
 }

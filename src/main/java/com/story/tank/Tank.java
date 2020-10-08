@@ -8,7 +8,7 @@ import java.util.Random;
  * @Author story
  * @CreateTIme 2020/10/3
  **/
-public class Tank {
+public class Tank extends GameObject {
     private int x, y;
     private Dir dir = Dir.DOWN;
     private final int SPEED;
@@ -41,7 +41,7 @@ public class Tank {
     }
 
     public void paint(Graphics g) {
-        if (!living) gm.enemies.remove(this);
+        if (!living) gm.remove(this);
         BufferedImage tankL = ResourceMgr.badTankL;
         BufferedImage tankU = ResourceMgr.badTankU;
         BufferedImage tankR = ResourceMgr.badTankR;
@@ -106,7 +106,7 @@ public class Tank {
         if (this.y > TankFrame.GAME_HEIGHT - Tank.HEIGHT - 2) y = TankFrame.GAME_HEIGHT - Tank.HEIGHT - 2;
     }
 
-    private void randomDir() {
+    public void randomDir() {
         this.dir = Dir.values()[random.nextInt(4)];
     }
 
@@ -156,10 +156,19 @@ public class Tank {
         int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2 - 1;
         int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2 + 4;
 
-        gm.bullets.add(new Bullet(bX, bY, this.dir, this.group, this.gm));
+        gm.add(new Bullet(bX, bY, this.dir, this.group, this.gm));
     }
 
     public void die() {
         this.living = false;
+    }
+
+    public Rectangle getRect() {
+        return rect;
+    }
+
+
+    public GameModel getGm() {
+        return gm;
     }
 }
