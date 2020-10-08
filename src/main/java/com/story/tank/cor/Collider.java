@@ -7,5 +7,5 @@ import com.story.tank.GameObject;
  * @CreateTIme 2020/10/8
  **/
 public interface Collider {
-    void collider(GameObject o1,GameObject o2);
+    boolean collide(GameObject o1,GameObject o2);
 }

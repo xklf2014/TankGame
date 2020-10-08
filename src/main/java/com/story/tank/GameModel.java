@@ -15,14 +15,9 @@ import java.util.List;
  **/
 public class GameModel {
     Tank myTank = new Tank(PropertyMgr.getInt("myTankLocX"), PropertyMgr.getInt("myTankLocY"), getDir(), Group.GOOD, this);
-    //List<Bullet> bullets = new ArrayList<>();
-    //List<Tank> enemies = new ArrayList<>();
     static final int GAME_WIDTH = PropertyMgr.getInt("gameWidth"), GAME_HEIGHT = PropertyMgr.getInt("gameHeight");
-    //List<Explode> explodes = new ArrayList<>();
     private List<GameObject> gameObjects = new ArrayList<>();
     ColliderChain colliderChain = new ColliderChain();
-    //Collider collider = new BulletTankCollider();
-    //Collider collider2 = new TankTankCollider();
 
 
     public GameModel() {
