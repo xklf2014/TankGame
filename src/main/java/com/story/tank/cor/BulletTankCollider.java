@@ -15,13 +15,13 @@ public class BulletTankCollider implements Collider {
         if (o1 instanceof Bullet && o2 instanceof Tank){
            Bullet b =  (Bullet)o1;
            Tank t = (Tank)o2;
-            if (!colliderWith(b,t)){
-                return true;
+            if (colliderWith(b,t)){
+                return false;
             }
         }else if (o2 instanceof Bullet && o1 instanceof Tank){
              collide(o2,o1);
         }
-        return false;
+        return true;
     }
 
     private boolean colliderWith(Bullet b,Tank t){

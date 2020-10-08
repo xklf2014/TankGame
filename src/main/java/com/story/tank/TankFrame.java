@@ -14,12 +14,7 @@ import java.awt.event.WindowEvent;
 public class TankFrame extends Frame {
 
     GameModel gm = new GameModel();
-
-    //Tank myTank = new Tank(PropertyMgr.getInt("myTankLocX"), PropertyMgr.getInt("myTankLocY"), getDir(), Group.GOOD, gm);
-    //List<Bullet> bullets = new ArrayList<>();
-    //List<Tank> enemies = new ArrayList<>();
     static final int GAME_WIDTH = PropertyMgr.getInt("gameWidth"), GAME_HEIGHT = PropertyMgr.getInt("gameHeight");
-    //List<Explode> explodes = new ArrayList<>();
 
     public TankFrame() {
         setVisible(true);
@@ -53,9 +48,7 @@ public class TankFrame extends Frame {
 
     @Override
     public void paint(Graphics g) {
-
         gm.paint(g);
-
     }
 
 
