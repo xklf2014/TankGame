@@ -1,5 +1,8 @@
 package com.story.tank;
 
+import com.story.tank.decorator.RectDecorator;
+import com.story.tank.decorator.TailDecorator;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
@@ -9,7 +12,7 @@ import java.util.Random;
  * @CreateTIme 2020/10/3
  **/
 public class Tank extends GameObject {
-    private int x, y;
+    //private int x, y;
     private Dir dir = Dir.DOWN;
     private final int SPEED;
     private boolean moving = false;
@@ -20,7 +23,7 @@ public class Tank extends GameObject {
     private Random random = new Random();
     private Group group = Group.BAD;
     Rectangle rect = new Rectangle();
-    private int oldX,oldY;
+    private int oldX, oldY;
 
     public Tank(int x, int y, Dir dir, Group group) {
         this.x = x;
@@ -74,7 +77,17 @@ public class Tank extends GameObject {
 
     }
 
-    public void back(){
+    @Override
+    public int getWidth() {
+        return WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return HEIGHT;
+    }
+
+    public void back() {
         this.x = oldX;
         this.y = oldY;
     }
@@ -160,12 +173,17 @@ public class Tank extends GameObject {
     }
 
 
-
     public void fire() {
         int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2 - 1;
         int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2 + 4;
 
-        GameModel.getInstance().add(new Bullet(bX, bY, this.dir, this.group));
+        GameModel.getInstance().add(
+                new RectDecorator(
+                        new TailDecorator(
+                                new Bullet(bX, bY, this.dir, this.group)
+                        )
+                )
+        );
     }
 
     public void die() {

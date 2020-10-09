@@ -26,6 +26,16 @@ public class Wall extends GameObject{
         g.drawImage(ResourceMgr.wall, x, y, null);
     }
 
+    @Override
+    public int getWidth() {
+        return WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return HEIGHT;
+    }
+
     public Rectangle getRect() {
         return rect;
     }
