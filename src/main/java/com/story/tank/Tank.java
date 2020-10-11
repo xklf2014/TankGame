@@ -2,9 +2,14 @@ package com.story.tank;
 
 import com.story.tank.decorator.RectDecorator;
 import com.story.tank.decorator.TailDecorator;
+import com.story.tank.observer.TankFireEvent;
+import com.story.tank.observer.TankFireHandler;
+import com.story.tank.observer.TankFireObserver;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -177,13 +182,14 @@ public class Tank extends GameObject {
         int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2 - 1;
         int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2 + 4;
 
-        GameModel.getInstance().add(
+     /*   GameModel.getInstance().add(
                 new RectDecorator(
                         new TailDecorator(
                                 new Bullet(bX, bY, this.dir, this.group)
                         )
                 )
-        );
+        );*/
+     new Bullet(bX,bY,this.dir,this.group);
     }
 
     public void die() {
@@ -194,5 +200,12 @@ public class Tank extends GameObject {
         return rect;
     }
 
+    private List<TankFireObserver> fireObservers = Arrays.asList(new TankFireHandler());
 
+    public void handleFireKey() {
+        TankFireEvent event = new TankFireEvent(this);
+        for (TankFireObserver o : fireObservers){
+            o.actionOnFire(event);
+        }
+    }
 }
