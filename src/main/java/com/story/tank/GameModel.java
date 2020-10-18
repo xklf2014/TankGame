@@ -3,6 +3,7 @@ package com.story.tank;
 import com.story.tank.cor.ColliderChain;
 
 import java.awt.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  **/
 public class GameModel {
     Tank myTank;
-    static final int GAME_WIDTH = PropertyMgr.getInt("gameWidth"), GAME_HEIGHT = PropertyMgr.getInt("gameHeight");
+    //static final int GAME_WIDTH = PropertyMgr.getInt("gameWidth"), GAME_HEIGHT = PropertyMgr.getInt("gameHeight");
     private List<GameObject> gameObjects = new ArrayList<>();
     ColliderChain colliderChain = new ColliderChain();
     private static final GameModel INSTANCE = new GameModel();
@@ -98,6 +99,50 @@ public class GameModel {
                 return Dir.DOWN;
             default:
                 return Dir.DOWN;
+        }
+    }
+
+    public void save(){
+        File file = new File("src/main/resources/data/tank.data");
+        ObjectOutputStream oos = null;
+        try {
+            oos = new ObjectOutputStream(new FileOutputStream(file));
+            oos.writeObject(myTank);
+            oos.writeObject(gameObjects);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            if (oos != null){
+                try {
+                    oos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+
+    public void load() {
+        File file = new File("src/main/resources/data/tank.data");
+        ObjectInputStream ois= null;
+        try {
+            ois = new ObjectInputStream(new FileInputStream(file));
+            myTank = (Tank) ois.readObject();
+            gameObjects = (List)ois.readObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }finally {
+            if (ois != null){
+                try {
+                    ois.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

@@ -76,8 +76,14 @@ public class TankFrame extends Frame {
                     bD = true;
                     break;
                 case KeyEvent.VK_CONTROL:
-                    GameModel.getInstance().getMainTank().handleFireKey();
-                    //GameModel.getInstance().getMainTank().fire();
+                    //GameModel.getInstance().getMainTank().handleFireKey();
+                    GameModel.getInstance().getMainTank().fire();
+                    break;
+                case KeyEvent.VK_S:
+                    GameModel.getInstance().save();
+                    break;
+                case KeyEvent.VK_L:
+                    GameModel.getInstance().load();
                     break;
                 default:
                     break;
