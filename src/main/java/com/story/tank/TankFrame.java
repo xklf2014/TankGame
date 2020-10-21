@@ -1,28 +1,45 @@
 package com.story.tank;
 
 
+import com.story.tank.net.Client;
+import com.story.tank.net.TankMovingMsg;
+import com.story.tank.net.TankStopMsg;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 
 /**
  * @Author story
  * @CreateTIme 2020/10/3
  **/
 public class TankFrame extends Frame {
-
-    Tank myTank = new Tank(PropertyMgr.getInt("myTankLocX"), PropertyMgr.getInt("myTankLocY"), getDir(), Group.GOOD, this);
+    Random r = new Random();
+    //Tank myTank = new Tank(PropertyMgr.getInt("myTankLocX"), PropertyMgr.getInt("myTankLocY"), getDir(), Group.GOOD, this);
+    Tank myTank = new Tank(r.nextInt(GAME_WIDTH), r.nextInt(GAME_HEIGHT), getDir(), Group.GOOD, this);
     List<Bullet> bullets = new ArrayList<>();
-    List<Tank> enemies = new ArrayList<>();
     static final int GAME_WIDTH = PropertyMgr.getInt("gameWidth"), GAME_HEIGHT = PropertyMgr.getInt("gameHeight");
     List<Explode> explodes = new ArrayList<>();
+    Map<UUID, Tank> tanks = new HashMap<>();
+
+    public static final TankFrame INSTANCE = new TankFrame();
+
+
+    public void addTank(Tank tank) {
+        System.out.println("tank size"+tanks.size());
+        tanks.put(tank.getId(), tank);
+    }
+
+    public Tank findByUUID(UUID id) {
+        return tanks.get(id);
+    }
 
     public TankFrame() {
-        setVisible(true);
+        //setVisible(true);
         setSize(GAME_WIDTH, GAME_HEIGHT);
         setTitle("tank game");
         setResizable(true);
@@ -45,6 +62,7 @@ public class TankFrame extends Frame {
         }
         Graphics gOffScreen = offScreenImage.getGraphics();
         Color color = gOffScreen.getColor();
+        gOffScreen.setColor(Color.BLACK);
         gOffScreen.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
         gOffScreen.setColor(color);
         print(gOffScreen);
@@ -56,7 +74,7 @@ public class TankFrame extends Frame {
         Color color = g.getColor();
         g.setColor(Color.WHITE);
         g.drawString("子弹的数量:" + bullets.size(), 10, 60);
-        g.drawString("敌军的数量:" + enemies.size(), 10, 80);
+        //g.drawString("敌军的数量:" + enemies.size(), 10, 80);
         g.setColor(color);
 
         myTank.paint(g);
@@ -65,19 +83,27 @@ public class TankFrame extends Frame {
             bullets.get(i).paint(g);
         }
 
-        for (int i = 0; i < enemies.size(); i++) {
+      /*  for (int i = 0; i < enemies.size(); i++) {
             enemies.get(i).paint(g);
-        }
+        }*/
 
-        for (int i = 0; i < bullets.size(); i++) {
+        tanks.values().stream().forEach((e) -> e.paint(g));
+
+      /*  for (int i = 0; i < bullets.size(); i++) {
             for (int j = 0; j < enemies.size(); j++) {
                 bullets.get(i).collideWith(enemies.get(j));
             }
-        }
+        }*/
 
-        //explode.paint(g);
         for (int i = 0; i < explodes.size(); i++) {
             explodes.get(i).paint(g);
+        }
+
+        Collection<Tank> values = tanks.values();
+        for (int i = 0; i < bullets.size(); i++) {
+            for (Tank t : values){
+                bullets.get(i).collideWith(t);
+            }
         }
 
     }
@@ -112,8 +138,8 @@ public class TankFrame extends Frame {
                 default:
                     break;
             }
-
             setMainTankDir();
+
 
         }
 
@@ -140,21 +166,27 @@ public class TankFrame extends Frame {
         }
 
         private void setMainTankDir() {
-            if (!bL && !bU && !bR && !bD) myTank.setMoving(false);
-            else {
-                myTank.setMoving(true);
+            if (!bL && !bU && !bR && !bD) {
+                myTank.setMoving(false);
+                Client.INSTANCE.send(new TankStopMsg(getMainTank()));
+            }else {
                 if (bL) myTank.setDir(Dir.LEFT);
                 if (bU) myTank.setDir(Dir.UP);
                 if (bR) myTank.setDir(Dir.RIGHT);
                 if (bD) myTank.setDir(Dir.DOWN);
+
+                if (!myTank.isMoving())
+                    Client.INSTANCE.send(new TankMovingMsg(getMainTank()));
+                myTank.setMoving(true);
             }
+
 
         }
 
     }
 
-    public Dir getDir(){
-        switch (PropertyMgr.getString("myTankDir").toUpperCase()){
+    public Dir getDir() {
+        switch (PropertyMgr.getString("myTankDir").toUpperCase()) {
             case "UP":
                 return Dir.UP;
             case "LEFT":
@@ -168,4 +200,7 @@ public class TankFrame extends Frame {
         }
     }
 
+    public Tank getMainTank() {
+        return myTank;
+    }
 }

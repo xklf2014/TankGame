@@ -1,8 +1,11 @@
 package com.story.tank;
 
+import com.story.tank.net.TankJoinMsg;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * @Author story
@@ -11,7 +14,7 @@ import java.util.Random;
 public class Tank {
     private int x, y;
     private Dir dir = Dir.DOWN;
-    private final int SPEED;
+    private final int SPEED = PropertyMgr.getInt("tankSpeed");
     private boolean moving = false;
     private TankFrame tf;
     public static final int WIDTH = ResourceMgr.goodTankU.getWidth(), HEIGHT = ResourceMgr.goodTankU.getHeight();
@@ -20,6 +23,16 @@ public class Tank {
     private Random random = new Random();
     private Group group = Group.BAD;
     Rectangle rect = new Rectangle();
+    private UUID id = UUID.randomUUID();
+
+    public Tank(TankJoinMsg msg) {
+        this.x = msg.x;
+        this.y = msg.y;
+        this.dir = msg.dir;
+        this.group = msg.group;
+        this.moving = msg.moving;
+        this.id = msg.id;
+    }
 
     public Tank(int x, int y, Dir dir, Group group, TankFrame tf) {
         this.x = x;
@@ -31,7 +44,7 @@ public class Tank {
             this.moving = true;
         }
 
-        this.SPEED = PropertyMgr.getInt("tankSpeed");
+        //this.SPEED = PropertyMgr.getInt("tankSpeed");
 
         rect.x = this.x;
         rect.y = this.y;
@@ -39,8 +52,31 @@ public class Tank {
         rect.height = Tank.HEIGHT;
     }
 
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+
+
     public void paint(Graphics g) {
-        if (!living) tf.enemies.remove(this);
+        //if (!living) tf.enemies.remove(this);
+
+        Color color = g.getColor();
+        g.setColor(Color.YELLOW);
+        g.drawString(id.toString(), this.x, this.y - 20);
+        g.drawString("live=" + living, x, y - 10);
+        g.setColor(color);
+
+        if (!living) {
+            moving = false;
+            Color cc = g.getColor();
+            g.setColor(Color.WHITE);
+            g.drawRect(x, y, WIDTH, HEIGHT);
+            g.setColor(cc);
+            return;
+        }
+
+
         BufferedImage tankL = ResourceMgr.badTankL;
         BufferedImage tankU = ResourceMgr.badTankU;
         BufferedImage tankR = ResourceMgr.badTankR;
@@ -52,6 +88,11 @@ public class Tank {
             tankR = ResourceMgr.goodTankR;
             tankD = ResourceMgr.goodTankD;
         }
+
+      /*  Color color = g.getColor();
+        g.setColor(Color.YELLOW);
+        g.drawString(this.id.toString(),this.x,this.y);
+        g.setColor(color);*/
 
         switch (dir) {
             case LEFT:
@@ -73,6 +114,7 @@ public class Tank {
     }
 
     private void move() {
+        if (!living) return;
         if (!moving) return;
 
         switch (dir) {
@@ -149,7 +191,9 @@ public class Tank {
         this.group = group;
     }
 
-
+    public UUID getId() {
+        return id;
+    }
 
     public void fire() {
         int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2 - 1;
@@ -161,4 +205,5 @@ public class Tank {
     public void die() {
         this.living = false;
     }
+
 }
