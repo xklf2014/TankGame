@@ -2,6 +2,7 @@ package com.story.tank;
 
 
 import com.story.tank.net.Client;
+import com.story.tank.net.TankDirChangeMsg;
 import com.story.tank.net.TankMovingMsg;
 import com.story.tank.net.TankStopMsg;
 
@@ -30,8 +31,8 @@ public class TankFrame extends Frame {
 
 
     public void addTank(Tank tank) {
-        System.out.println("tank size"+tanks.size());
         tanks.put(tank.getId(), tank);
+        System.out.println("tank size"+tanks.size());
     }
 
     public Tank findByUUID(UUID id) {
@@ -83,17 +84,7 @@ public class TankFrame extends Frame {
             bullets.get(i).paint(g);
         }
 
-      /*  for (int i = 0; i < enemies.size(); i++) {
-            enemies.get(i).paint(g);
-        }*/
-
         tanks.values().stream().forEach((e) -> e.paint(g));
-
-      /*  for (int i = 0; i < bullets.size(); i++) {
-            for (int j = 0; j < enemies.size(); j++) {
-                bullets.get(i).collideWith(enemies.get(j));
-            }
-        }*/
 
         for (int i = 0; i < explodes.size(); i++) {
             explodes.get(i).paint(g);
@@ -106,6 +97,19 @@ public class TankFrame extends Frame {
             }
         }
 
+    }
+
+    public void addBullet(Bullet bullet) {
+        bullets.add(bullet);
+    }
+
+    public Bullet findBulletByUUID(UUID bulletId){
+        for (int i = 0; i < bullets.size(); i++) {
+            if (bulletId.equals(bullets.get(i).getId())){
+                return bullets.get(i);
+            }
+        }
+        return null;
     }
 
 
@@ -132,9 +136,9 @@ public class TankFrame extends Frame {
                 case KeyEvent.VK_DOWN:
                     bD = true;
                     break;
-                case KeyEvent.VK_CONTROL:
-                    myTank.fire();
-                    break;
+                //case KeyEvent.VK_CONTROL:
+                    //myTank.fire();
+                    //break;
                 default:
                     break;
             }
@@ -159,6 +163,9 @@ public class TankFrame extends Frame {
                 case KeyEvent.VK_DOWN:
                     bD = false;
                     break;
+                case KeyEvent.VK_CONTROL:
+                    myTank.fire();
+                    break;
                 default:
                     break;
             }
@@ -166,6 +173,9 @@ public class TankFrame extends Frame {
         }
 
         private void setMainTankDir() {
+
+            Dir dir = myTank.getDir();
+
             if (!bL && !bU && !bR && !bD) {
                 myTank.setMoving(false);
                 Client.INSTANCE.send(new TankStopMsg(getMainTank()));
@@ -174,6 +184,10 @@ public class TankFrame extends Frame {
                 if (bU) myTank.setDir(Dir.UP);
                 if (bR) myTank.setDir(Dir.RIGHT);
                 if (bD) myTank.setDir(Dir.DOWN);
+
+                if ( dir != myTank.getDir()){
+                    Client.INSTANCE.send(new TankDirChangeMsg(getMainTank()));
+                }
 
                 if (!myTank.isMoving())
                     Client.INSTANCE.send(new TankMovingMsg(getMainTank()));

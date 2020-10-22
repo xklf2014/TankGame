@@ -62,8 +62,8 @@ class ClientChannelInitializer extends ChannelInitializer<SocketChannel>{
     @Override
     protected void initChannel(SocketChannel channel) throws Exception {
         channel.pipeline()
-                .addLast(new TankMsgEncoder())
-                .addLast(new TankMsgDecoder())
+                .addLast(new MsgEncoder())
+                .addLast(new MsgDecoder())
                 .addLast(new ClientHandler());
     }
 }

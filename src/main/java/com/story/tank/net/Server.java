@@ -29,8 +29,8 @@ public class Server {
                         @Override
                         protected void initChannel(SocketChannel sc) throws Exception {
                             ChannelPipeline pl = sc.pipeline();
-                            pl.addLast(new TankMsgEncoder());
-                            pl.addLast(new TankMsgDecoder());
+                            pl.addLast(new MsgEncoder());
+                            pl.addLast(new MsgDecoder());
                             pl.addLast(new ServerChildHandler());
                         }
                     }).bind(8888)

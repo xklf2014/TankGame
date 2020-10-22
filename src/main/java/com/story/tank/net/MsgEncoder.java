@@ -8,7 +8,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
  * @Author story
  * @CreateTIme 2020/10/18
  **/
-public class TankMsgEncoder extends MessageToByteEncoder<Msg> {
+public class MsgEncoder extends MessageToByteEncoder<Msg> {
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, Msg msg, ByteBuf byteBuf) throws Exception {

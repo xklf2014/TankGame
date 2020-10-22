@@ -10,7 +10,7 @@ import java.util.List;
  * @Author story
  * @CreateTIme 2020/10/18
  **/
-public class TankMsgDecoder extends ByteToMessageDecoder {
+public class MsgDecoder extends ByteToMessageDecoder {
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf in, List<Object> out) throws Exception {
         if (in.readableBytes() < 8) return;
@@ -38,12 +38,21 @@ public class TankMsgDecoder extends ByteToMessageDecoder {
             case TankStop:
                 msg = new TankStopMsg();
                 break;
+            case TankDirChanged:
+                msg = new TankDirChangeMsg();
+                break;
+            case BulletNew:
+                msg = new BulletNewMsg();
+                break;
+            case TankDie:
+                msg = new TankDieMsg();
+                break;
             default:
                 break;
         }
         msg.parse(bytes);
         out.add(msg);
-
-
     }
+
+
 }

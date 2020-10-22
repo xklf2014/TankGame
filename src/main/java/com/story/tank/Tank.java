@@ -1,5 +1,7 @@
 package com.story.tank;
 
+import com.story.tank.net.BulletNewMsg;
+import com.story.tank.net.Client;
 import com.story.tank.net.TankJoinMsg;
 
 import java.awt.*;
@@ -32,6 +34,11 @@ public class Tank {
         this.group = msg.group;
         this.moving = msg.moving;
         this.id = msg.id;
+
+        rect.x = this.x;
+        rect.y = this.y;
+        rect.width = WIDTH;
+        rect.height = HEIGHT;
     }
 
     public Tank(int x, int y, Dir dir, Group group, TankFrame tf) {
@@ -55,7 +62,6 @@ public class Tank {
     public void setId(UUID id) {
         this.id = id;
     }
-
 
 
     public void paint(Graphics g) {
@@ -196,14 +202,22 @@ public class Tank {
     }
 
     public void fire() {
-        int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2 - 1;
-        int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2 + 4;
+        int bX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2;
+        int bY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2;
+        Bullet b = new Bullet(this.id, bX, bY, this.dir, this.getGroup(), this.tf);
+        tf.bullets.add(b);
 
-        tf.bullets.add(new Bullet(bX, bY, this.dir, this.group, this.tf));
+        Client.INSTANCE.send(new BulletNewMsg(b));
     }
 
     public void die() {
         this.living = false;
+        int eX = this.x + Tank.WIDTH / 2 - Bullet.WIDTH / 2 - 1;
+        int eY = this.y + Tank.HEIGHT / 2 - Bullet.HEIGHT / 2 + 4;
+        TankFrame.INSTANCE.explodes.add(new Explode(eX, eY));
     }
 
+    public boolean isLiving() {
+        return living;
+    }
 }
