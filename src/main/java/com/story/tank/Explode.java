@@ -11,25 +11,19 @@ public class Explode {
 
     private int x, y;
     private boolean living = true;
-    TankFrame tf = null;
+    //TankFrame tf = null;
     private int step = 0;
-
-    public Explode(int x, int y, TankFrame tf) {
-        this.x = x;
-        this.y = y;
-        this.tf = tf;
-        //new Audio("audio/explode.wav").play();
-    }
 
     public Explode(int x, int y) {
         this.x = x;
         this.y = y;
+        //this.tf = tf;
+        new Thread(()->new Audio("audio/explode.wav").play()).start();
     }
 
     public void paint(Graphics g) {
         g.drawImage(ResourceMgr.explodes[step++], x, y, null);
-        if (step >= ResourceMgr.explodes.length) this.tf.explodes.remove(this);
-
+        if (step >= ResourceMgr.explodes.length) TankFrame.INSTANCE.explodes.remove(this);
     }
 
 }

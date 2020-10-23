@@ -12,7 +12,6 @@ public class MsgEncoder extends MessageToByteEncoder<Msg> {
 
     @Override
     protected void encode(ChannelHandlerContext channelHandlerContext, Msg msg, ByteBuf byteBuf) throws Exception {
-        System.out.println("---encode----");
         byteBuf.writeInt(msg.getMsgType().ordinal());
         byte[] bytes = msg.toBytes();
         byteBuf.writeInt(bytes.length);

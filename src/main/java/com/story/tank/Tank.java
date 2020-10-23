@@ -67,20 +67,20 @@ public class Tank {
     public void paint(Graphics g) {
         //if (!living) tf.enemies.remove(this);
 
+        if (!living) {
+            moving = false;
+            /*Color cc = g.getColor();
+            g.setColor(Color.WHITE);
+            g.drawRect(x, y, WIDTH, HEIGHT);
+            g.setColor(cc);*/
+            return;
+        }
+
         Color color = g.getColor();
         g.setColor(Color.YELLOW);
         g.drawString(id.toString(), this.x, this.y - 20);
         g.drawString("live=" + living, x, y - 10);
         g.setColor(color);
-
-        if (!living) {
-            moving = false;
-            Color cc = g.getColor();
-            g.setColor(Color.WHITE);
-            g.drawRect(x, y, WIDTH, HEIGHT);
-            g.setColor(cc);
-            return;
-        }
 
 
         BufferedImage tankL = ResourceMgr.badTankL;

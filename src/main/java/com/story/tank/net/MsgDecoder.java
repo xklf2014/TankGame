@@ -28,28 +28,10 @@ public class MsgDecoder extends ByteToMessageDecoder {
        byte[] bytes = new byte[length];
         in.readBytes(bytes);
         Msg msg = null;
-        switch (msgType){
-            case TankJoin:
-                msg = new TankJoinMsg();
-                break;
-            case TankStartMoving:
-                msg = new TankMovingMsg();
-                break;
-            case TankStop:
-                msg = new TankStopMsg();
-                break;
-            case TankDirChanged:
-                msg = new TankDirChangeMsg();
-                break;
-            case BulletNew:
-                msg = new BulletNewMsg();
-                break;
-            case TankDie:
-                msg = new TankDieMsg();
-                break;
-            default:
-                break;
-        }
+
+        msg = (Msg)Class.forName("com.story.tank.net."+msgType.toString()+"Msg")
+                .getDeclaredConstructor().newInstance();
+
         msg.parse(bytes);
         out.add(msg);
     }

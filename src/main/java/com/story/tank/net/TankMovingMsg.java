@@ -155,6 +155,6 @@ public class TankMovingMsg extends Msg {
 
     @Override
     public MsgType getMsgType() {
-        return MsgType.TankStartMoving;
+        return MsgType.TankMoving;
     }
 }

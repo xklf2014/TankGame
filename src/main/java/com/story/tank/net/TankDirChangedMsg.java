@@ -11,22 +11,22 @@ import java.util.UUID;
  * @Author story
  * @CreateTIme 2020/10/22
  **/
-public class TankDirChangeMsg extends Msg {
+public class TankDirChangedMsg extends Msg {
     UUID id;
     int x,y;
     Dir dir;
 
-    public TankDirChangeMsg() {
+    public TankDirChangedMsg() {
     }
 
-    public TankDirChangeMsg(UUID id, int x, int y, Dir dir) {
+    public TankDirChangedMsg(UUID id, int x, int y, Dir dir) {
         this.id = id;
         this.x = x;
         this.y = y;
         this.dir = dir;
     }
 
-    public TankDirChangeMsg(Tank t){
+    public TankDirChangedMsg(Tank t){
         this.id = t.getId();
         this.x = t.getX();
         this.y = t.getY();

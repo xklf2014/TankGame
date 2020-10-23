@@ -1,10 +1,7 @@
 package com.story.tank;
 
 
-import com.story.tank.net.Client;
-import com.story.tank.net.TankDirChangeMsg;
-import com.story.tank.net.TankMovingMsg;
-import com.story.tank.net.TankStopMsg;
+import com.story.tank.net.*;
 
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -20,19 +17,18 @@ import java.util.*;
  **/
 public class TankFrame extends Frame {
     Random r = new Random();
-    //Tank myTank = new Tank(PropertyMgr.getInt("myTankLocX"), PropertyMgr.getInt("myTankLocY"), getDir(), Group.GOOD, this);
     Tank myTank = new Tank(r.nextInt(GAME_WIDTH), r.nextInt(GAME_HEIGHT), getDir(), Group.GOOD, this);
     List<Bullet> bullets = new ArrayList<>();
     static final int GAME_WIDTH = PropertyMgr.getInt("gameWidth"), GAME_HEIGHT = PropertyMgr.getInt("gameHeight");
     List<Explode> explodes = new ArrayList<>();
-    Map<UUID, Tank> tanks = new HashMap<>();
+    public Map<UUID, Tank> tanks = new HashMap<>();
 
     public static final TankFrame INSTANCE = new TankFrame();
 
 
     public void addTank(Tank tank) {
         tanks.put(tank.getId(), tank);
-        System.out.println("tank size"+tanks.size());
+        //System.out.println("tank size"+tanks.size());
     }
 
     public Tank findByUUID(UUID id) {
@@ -40,7 +36,6 @@ public class TankFrame extends Frame {
     }
 
     public TankFrame() {
-        //setVisible(true);
         setSize(GAME_WIDTH, GAME_HEIGHT);
         setTitle("tank game");
         setResizable(true);
@@ -49,6 +44,7 @@ public class TankFrame extends Frame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                Client.INSTANCE.send(new TankExitMsg(getMainTank().getId()));
                 System.exit(0);
             }
         });
@@ -186,7 +182,7 @@ public class TankFrame extends Frame {
                 if (bD) myTank.setDir(Dir.DOWN);
 
                 if ( dir != myTank.getDir()){
-                    Client.INSTANCE.send(new TankDirChangeMsg(getMainTank()));
+                    Client.INSTANCE.send(new TankDirChangedMsg(getMainTank()));
                 }
 
                 if (!myTank.isMoving())
